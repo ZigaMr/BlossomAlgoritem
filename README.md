@@ -9,7 +9,7 @@ pri čemer se iskanje nadaljuje v skrčenenm grafu.
 Blossomov algoritem je pomemben, ker je prvi v katerem je mogoče najti ujemanje v polinomskem času.
 Drug razlog je, da je vodilo do linearnega programiranja poliridnega opisa ujemajočega politopa, kar je omogočilo algoritem za ujemanje z min-težo
 
-##Blossom
+#Blossom
 
 https://brilliant.org/wiki/blossom-algorithm/
 
@@ -22,7 +22,7 @@ Cilj algoritma je, da se cveti združijo v eno vozlišče, da bi našli povečan
 Deluje z zaganjanjem madžarskega algoritma, dokler ne zaide v cvet, ki se nato skrči navzdol v eno vozlišče. 
 Nato začne spet madžarski algoritem. Če se najde drug cvet, se cveti in začne madžarski algoritem, in tako naprej.
 
-## Iskanje blosoomov
+# Iskanje blosoomov
 
 
 Traverse the graph starting from an exposed vertex.
@@ -30,7 +30,7 @@ Starting from that vertex, label it as an outer vertex "o".
 Alternate the labeling between vertices being inner "i" and outer "o" such that no two adjacent vertices have the same label.
 If we end up with two adjacent vertices labeled as outer "o" then we have an odd-length cycle and hence a blossom.
 
-##Algoritem iskanja povečujočih poti
+#Algoritem iskanja povečujočih poti
 
 wiki Finding an augmenting path
 VHOD:  Graf G, ujemanje M v G
