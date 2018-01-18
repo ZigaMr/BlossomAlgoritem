@@ -37,8 +37,15 @@ Ko smo v določeni točki našli razširjeno pot, moramo še enkrat razširiti v
 ## Algoritem iskanja povečujočih poti
 
 wiki Finding an augmenting path
-VHOD:  Graf G, ujemanje M v G
-IZHOD: Povečujoča pot v G, če je najdena, sicer prazna pot
+* VHOD:  Graf G, ujemanje M v G
+* IZHOD: Povečujoča pot v G, če je najdena, sicer prazna pot
+
+## Viri
+* http://www.imsc.res.in/~meena/matching/edmonds.pdf
+* https://en.wikipedia.org/wiki/Blossom_algorithm
+* https://www-m9.ma.tum.de/graph-algorithms/matchings-blossom-algorithm/index_en.html
+* https://brilliant.org/wiki/blossom-algorithm/
+* https://stanford.edu/~rezab/classes/cme323/S16/projects_reports/shoemaker_vare.pdf
 
 
 
