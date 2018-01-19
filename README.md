@@ -69,8 +69,8 @@ Z Bergejevo lemo je ujemanje M največje, če in le če v G ne obstaja M-širitv
 Tako lahko z začetnega ujemanja izračunamo maksimalno ujemanje, tako da povečamo trenutno ujemanje z razširitvami poti, dokler jih lahko najdemo in se vrnemo, če ni več poti za povečanje.
 Algoritem lahko formaliziramo na naslednji način:
 
-VHOF:  Graph G, initial matching M on G
-   IZHOD: maximum matching M* on G
+VHOD:  Graph G, initial matching M on G
+IZHOD: maximum matching M* on G
 A1 function find_maximum_matching( G, M ) : M*
 A2     P ← find_augmenting_path( G, M )
 A3     if P is non-empty then
@@ -94,5 +94,7 @@ da obstaja izmenična pot cele dolžine (stebla) od v do izpostavljene vozlišč
 * https://brilliant.org/wiki/blossom-algorithm/
 * https://stanford.edu/~rezab/classes/cme323/S16/projects_reports/shoemaker_vare.pdf
 
-
+## Primeri
+* http://demonstrations.wolfram.com/TheBlossomAlgorithmForWeightedGraphs/
+* http://demonstrations.wolfram.com/TheBlossomAlgorithmForMaximumMatching/
 
