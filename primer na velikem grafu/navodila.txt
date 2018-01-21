@@ -1,0 +1,55 @@
+
+Free vertices left
+
+There are still unmatched vertices (yellow). We call them free vertices. We try to find an augmenting path to improve the matching. An augmenting path starts and ends at a free vertex and alternates between unmatched and matched edges.
+
+
+Start Breadth-First Search
+
+We pick one of the free vertices as the root node of a modified Breadth-First Search (BFS). Its stroke is colored red throughout the execution of the BFS. From the root node, we will construct a tree of alternating paths (BFS tree) until we reach another free vertex.
+
+
+
+Continue BFS with next node
+
+Pick the next node from the BFS queue. We call this node the currently active node and color it red. From this node, we will explore its neighbors to look for a free vertex.
+
+
+Check next neighbor
+
+We check the next neighbor (orange edge) and find that it is a free vertex (yellow). Thus, there is an augmenting path between the root of the BFS and this vertex.
+
+
+Reconstruction of augmenting path
+
+The augmenting path from the BFS root to the free vertex found has been fully reconstructed and is highlighted green.
+
+
+Improved matching
+
+The augmenting path is inverted to improve the matching. Inverting an augmenting path means that all unmatched edges along the path are changed to matched ones and vice versa. By doing so, the number of edges contained in the matching increases by 1. The new matching is colored blue.
+
+
+Grow BFS tree
+
+We add the neighbor and its mate to the BFS tree. The mate is further pushed to the BFS queue and we might continue our search from there later. The edges of the BFS tree are highlighted by a grey overlay.
+
+
+Check next neighbor
+
+We check the next neighbor (orange) and find that this node is already contained in the BFS tree. Thus, there exists a cycle and we see that it has an odd number of edges. We call such a cycle a blossom.
+
+
+Reconstruction of augmenting path
+
+The augmenting path is highlighted green. Before improving the matching we have to expand the supernodes contained in the graph.
+
+
+Improved matching
+
+The augmenting path is inverted to improve the matching. Inverting an augmenting path means that all unmatched edges along the path are changed to matched ones and vice versa. By doing so, the number of edges contained in the matching increases by 1. The new matching is colored blue.
+
+
+Algorithm finished
+
+There are no free vertices in the graph anymore so we have found a matching of maximum cardinality. Its edges are colored blue.
