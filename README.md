@@ -22,6 +22,10 @@ Cilj algoritma je, da se cveti združijo v eno vozlišče, da bi našli povečan
 Deluje z zaganjanjem madžarskega algoritma, dokler ne zaide v cvet, ki se nato skrči navzdol v eno vozlišče. 
 Nato začne spet madžarski algoritem. Če se najde drug cvet, se cveti in začne madžarski algoritem, in tako naprej.
 
+Vozlišče v, ki je v blossomu in ni v incidentu je osnova blossoma.
+
+če w is ni končna točka, eden od stems mora biti v incidentu z v-jem.
+
 
 V splošnih grafih uporabljamo tudi Hopcroft-Karp Algoritem, da bi našli poti za povečanje. Vendar pa lahko zdaj odkrijemo cikle lihe dolžine in moramo ustrezno obravnavati ta primer. 
 Zamisel je naslednja: celoten cikel zanemarimo tako, da jo skrčimo v eno vozlišče in nadaljujemo z BFS v novem grafu. 
@@ -33,6 +37,8 @@ Ko smo v določeni točki našli razširjeno pot, moramo še enkrat razširiti v
 2. Začni iz tistega vozlišča, ki je označen kot izhodno vozlišče "o"
 3. Alterniraj oznake med vozliščem z "i" in "o", tako, da nobena sosednja vozlišča nimajo enake oznake
 4. Če končamo z dvema sosednjima vozliščema, ki sta označeni z "o", potem imamo cikel lihe dolžine in blossom.
+
+
 
 ## Algoritem iskanja povečujočih poti
 
@@ -105,6 +111,16 @@ A8 end function
 
 Glede na G = (V, E) in prirejanje M od G je cvet B cikel v G, ki je sestavljen iz 2k + 1 povezav, od katerih točno k pripadata M, in kjer je ena od tock v v ciklu (osnova ) je taka, 
 da obstaja izmenična pot cele dolžine (stebla) od v do izpostavljene vozlišča w.
+
+## Časovna zahtevnost
+
+vsaka povečujoča pot ima lahko O(n) blossomovih skrčitev.
+
+Blossomov algoritem zahteva n//2 klicev funkcije povečujoče poti
+
+Število povezav je v prireranju M v grafu z n vozlišč največ n//2, v vsakem koraku se poveča za 1.
+
+
 
 
 ## Viri
