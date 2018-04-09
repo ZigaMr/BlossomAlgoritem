@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+    <link rel="alternate" hreflang="de" href="https://www-m9.ma.tum.de/graph-algorithms/matchings-blossom-algorithm/index_de.html">
+
+<!--     the whole page layout style -->
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+
+    <link rel="stylesheet" type="text/css" href="static/jquery-ui-1.css">
+ <!--   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"> -->
+
+ <!--     MathJax, used in the more tab in pseudocode -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            showMathMenu: false,
+            showMathMenuMSIE: false
+        });
+    </script>
+
+<!-- LOCAL -->
+    <script src="static/jquery-1.js" type="text/javascript"></script>
+    <script src="static/jquery-ui-1.js" type="text/javascript"></script>
+    <link type="text/css" href="static/jquery.css" rel="stylesheet">
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/MathJax.js"></script>
+    <script src="static/d3.js"></script>
+
+    <script src="static/lang.js" type="text/javascript"></script>
+
+<!--     Adrians d3 related library code -->
+    <script src="static/Graph.js"></script>
+    <script src="static/GraphDrawer.js"></script>
+    <script src="static/GraphEditor.js"></script>
+    <script src="static/Logger.js"></script>
+    <script src="static/Tab.js"></script>
+    <script src="static/AlgorithmTab.js"></script>
+    <script src="static/GraphEditorTab.js"></script>
+    <script src="static/siteAnimation.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="static/graph-style.css">
+    <link rel="stylesheet" type="text/css" href="static/style_002.css">
+
+<!--     Files used only for this applet -->
+    <script src="static/BlossomAlgorithm.js" type="text/javascript"></script>
+
+    <title>Edmond blossom algoritem</title>
+<style></style><style></style></head>
+<body>
+    <noscript>
+        <div class="ui-widget">
+            <div class="ui-state-error ui-corner-all" style="padding: .7em;">
+                <div class="ui-icon ui-icon-alert errorIcon"></div>
+                <strong>Please activate Javascript!</strong>
+                <ul style="margin: 0px;">
+                    <li>
+                        This website needs Javascript in order to be displayed properly.
+                    </li>
+                    <li>
+                        Javascript is currently deactivated in your browser. A manual for the activation of Javascript can be found <a href="http://www.enable-javascript.com/">here</a>.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </noscript>
+    <script>
+        $(function() {
+            initializeSiteLayout(BlossomAlgorithm);
+            
+        });
+        $(document).ready(function() {
+            $("#menu").mmenu({
+               "navbar": {
+                  "title": "Übersicht"
+               },
+               "offCanvas": {
+                  "zposition": "front"
+               },
+               "counters": true,
+               "slidingSubmenus": true,
+               "classes": "mm-light",
+            });
+         });
+    </script>
+    <a id="menu_link" href="#menu"></a>
+    <nav id="menu">
+        <ul>
+            <li>
+                <a style="white-space:pre-line" href="http://www-m9.ma.tum.de/Allgemeines/GraphAlgorithmenEn">
+                <img src="static/logo_ohne.png" alt="Overview Graph Algorithms">
+                Graph Algorithms Landing Page</a>
+            </li>
+            <li><span>Shortest Path Algorithms</span>
+                <ul>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/spp-dijkstra/index_en.html">Dijkstra's Algorithm</a></li>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/spp-a-star/index_en.html">A* Algorithm</a></li>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/spp-bellman-ford/index_en.html">Bellman-Ford Algorithm</a></li>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/spp-floyd-warshall/index_en.html">Floyd-Warshall Algorithm</a></li>
+                   <!--<li><a href="../spprc-label-setting/index_en.html">Label-Setting Algorithm</a></li>-->
+                </ul>
+            </li>
+            <li><span>Spanning Tree Algorithms</span>
+                <ul>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/mst-prim/index_en.html">Prim's Algorithm</a></li>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/mst-kruskal/index_en.html">Kruskal's Algorithm</a></li>
+                </ul>
+            </li>
+            <li><span>Flow Algorithms</span>
+                <ul>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/flow-ford-fulkerson/index_en.html">Ford-Fulkerson Algorithm</a></li>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/flow-cycle-cancelling/index_en.html">Cycle-Cancelling Algorithm</a></li>
+                   <!--<li><a href="../flow-push-relabel/index_en.html">Push-Relabel Algorithm</a></li>-->
+                </ul>
+            </li>
+            <li><span>Matching Algorithms</span>
+                <ul>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/matchings-hopcroft-karp/index_en.html">Hopcroft-Karp Algorithm</a></li>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/matchings-hungarian-method/index_en.html">Hungarian Method</a></li>
+                   <li class="Selected"><a href="https://www-m9.ma.tum.de/graph-algorithms/matchings-blossom-algorithm/index_en.html">Blossom Algorithm</a></li> 
+                </ul>
+            </li>
+            <li><span>Euler Tours and Chinese Postman Problem</span>
+                <ul>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/hierholzer/index_en.html">Hierholzer's Algorithm</a></li>
+                   <li><a href="https://www-m9.ma.tum.de/graph-algorithms/directed-chinese-postman/index_en.html">Chinese Postman Problem</a></li>
+                </ul>             
+            </li>
+        </ul>
+    </nav>
+    <div>
+    <header>
+        <img src="static/24_Header.png" height="100">
+        <span class="adrianheader">Edmonds's Blossom Algorithm</span>
+        <img src="static/25_Header.png" height="100">
+        <img style="position:absolute; right:0px" src="static/TUMLogo.png" alt="Technische Universität München">
+    </header>
+
+    <div id="tabs">
+        <ul>
+            <li><a href="#tab_te"><span>Uvod</span></a></li>
+            <li><a href="#tab_tg"><span>Ustvari graf</span></a></li>
+            <li><a href="#tab_ta"><span>Zaženi algoritem</span></a></li>
+            <li><a href="#tab_ti"><span>Opis algoritma</span></a></li>
+            <li><a href="#tab_tw"><span>Več</span></a></li>
+        </ul>
+
+        <!-- TAB Einführung -->
+        <div id="tab_te">
+            <div id="te_div_Einfuehrungstext">
+
+                <div id="te_div_beispiel1Container">
+                <div id="svgtest"></div>
+                <!-- <img id="te_img_beispiel1" src="examplePic.jpg" alt="ahuja"> -->
+                <!-- <p>OWN PICTURE HERE!</p> --> 
+				
+	            </div> 
+
+
+                <h1>Največje prirejanje v splošnih grafih</h1>
+				<div class="BeispielbildContainer">
+				<img id="ti_img_0" src="static/01_Introduction.png" alt="Suche" width="250"><p>Maximum matching in a general graph. <br>Edges contained in the matching are colored blue.</p><br>
+                </div>
+                <p> Prirejanje
+ M je podmnožica povezav, tako da je vsak vozel s tako povezavo pokrit največ 1x.</p>
+
+                <br style="clear: both;">
+            </div>
+        </div>
+
+        <!-- TAB Graph Erstellen -->
+        <div id="tab_tg">
+            <div>
+                <div class="canvasWrapper">
+                    <div class="svgContainer"><svg class="graphCanvas" id="tg_canvas_graph" width="700" height="500"></svg></div>
+                    <a class="svgDownloader" download="graph-editor.svg" href="data:text/plain,test">SVG Download</a>
+                    <div class="Legende" id="tg_div_Legende">
+                        <h2 class="LegendeHeader"><button class="LegendeMin"></button> Legenda</h2>
+                        <div class="LegendeText">
+                            <table>
+                                <tbody><tr>
+                                    <td class="LegendeTabelle"><img src="static/node.svg" alt="node" class="LegendeIcon"></td>
+                                    <td><span>&nbsp;&nbsp;node</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="LegendeTabelle"><img src="static/10_Edge.png" alt="edge" class="LegendeIcon" width="100"></td>
+                                    <td><span>&nbsp;&nbsp;undirected edge</span></td>
+                                </tr>
+                            </tbody></table>
+                        </div>
+                    </div>
+                    <div class="LegendeMinimized">
+                        <h2 class="LegendeHeader"><button class="LegendeMin"></button> Legend</h2>
+                    </div>
+                </div>
+                <div id="tg_div_statusWindow" class="statusWindow">
+                    <label for="graphSelector">Izberi </label>
+<!-- add own graph examples here: -->
+                    <select name="graphSelector" id="tg_select_GraphSelector">
+                        <option selected="selected" label="Triangle">Triangle</option>
+                        <option label="Pentagon">Pentagon</option>
+                        <option label="Triangles and squares">Triangles and squares</option>
+                        <option label="House of cards">House of cards</option>
+                        <option label="Large house of cards">Large house of cards</option>
+                        <option label="Large graph">Large graph</option>
+                        <option label="Another large graph">Another large graph</option>
+                        <option label="Random graph">Random graph</option>
+                    </select>
+
+                    <!--<h3>Create a random graph:</h3>
+                    <p><button id="tg_button_createRandomGraph">New random graph</button></p>-->
+
+                    <h3>Spremeni graf<br></h3>
+                    <div id="tg_div_statusErklaerung">
+                    <ul>
+                        <li>Za ustvarjanje vozla dvoklikni na risalno površino.</li>
+                        <li>Za ustvarjanje povezave klikni izhodno vozlišče in nato še vhodno vozlišče</li>
+                        <li>Desni klik zbriše vozlišča in povezave</li>
+                    </ul>
+                    </div>
+                    
+                    <h3>Shrani graf:</h3>
+                    
+                    <a id="fileDownloader" download="graph.txt" href="data:text/plain,test">Shrani</a>
+                    
+                    <h3>Naloži graf:</h3>
+                    <input id="fileUploader" accept=".txt" type="file">
+                    <div id="ta_div_parseError" title="Napaka pri branju iz datoteke">
+                        A
+                        <h2 style="color:red" id="ta_div_parseErrorText"></h2>
+                        occured when reading from file:
+                        <h3 id="ta_div_parseErrorFilename"></h3>
+                        the contents:
+                        <pre id="ta_div_parseErrorDescription"></pre>
+                    </div>
+
+                   <p><button id="tg_button_gotoAlgorithmTab">Zaženi algoritem</button></p>
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB Algorithmus ausführen -->
+       <div id="tab_ta">
+            <div>
+                <div class="canvasWrapper">
+                    <div class="svgContainer">
+                    <svg class="graphCanvas" id="ta_canvas_graph" width="700" height="450"></svg>
+                    </div>
+                    <a class="svgDownloader" download="graph-algorithm.svg" href="data:text/plain,test">SVG Download</a>
+                    <div class="Legende">
+                        <h2 class="LegendeHeader"><button class="LegendeMin"></button> Legenda</h2>
+                        <div class="LegendeText">
+                            <table>
+                                <tbody><tr>
+                                    <td class="LegendeTabelle"><img src="static/11_Node.png" alt="node" class="LegendeIcon"></td>
+                                    <td><span>rumena: prosto vozlišče</span></td>
+                                </tr>
+								<tr>
+                                    <td class="LegendeTabelle"><img src="static/12_Node.png" alt="node" class="LegendeIcon"></td>
+                                    <td><span>rdeča obroba: koren BFS</span></td>
+                                </tr>
+								<tr>
+                                    <td class="LegendeTabelle"><img src="static/13_Node.png" alt="node" class="LegendeIcon"></td>
+                                    <td><span>rdeča: trenutno aktivno vozlišče v BFS</span></td>
+                                </tr>
+								<tr>
+                                    <td class="LegendeTabelle"><img src="static/16_Node.png" alt="node" class="LegendeIcon"></td>
+                                    <td><span>oranžna: trenutni pregledani sosed v BFS</span></td>
+                                </tr>
+								<tr>
+                                    <td class="LegendeTabelle"><img src="static/14_Node.png" alt="node" class="LegendeIcon"></td>
+                                    <td><span>zelena: vozel na povečujoči poti</span></td>
+                                </tr>
+								<tr>
+                                    <td class="LegendeTabelle"><img src="static/15_Node.png" alt="node" width="50"></td>
+                                    <td><span>večji premer: stisnjen vozel</span></td>
+                                </tr>
+								<tr>
+                                    <td class="LegendeTabelle"><img src="static/17_Edge.png" alt="node" class="LegendeIcon" width="100"></td>
+                                    <td><span>oranžna: trenutna povezava v BFS</span></td>
+                                </tr>
+								<tr>
+                                    <td class="LegendeTabelle"><img src="static/18_Edge.png" alt="node" class="LegendeIcon" width="100"></td>
+                                    <td><span>modra: povezava v prirejanju</span></td>
+                                </tr>
+								<tr>
+                                    <td class="LegendeTabelle"><img src="static/19_Edge.png" alt="node" class="LegendeIcon" width="100"></td>
+                                    <td><span>siva prevleka: povezava v BFS drevesu</span></td>
+                                </tr>
+								<tr>
+                                    <td class="LegendeTabelle"><img src="static/20_Edge.png" alt="node" class="LegendeIcon" width="100"></td>
+                                    <td><span>zelena prevleka: povezava na povečujoči poti</span></td>
+                                </tr>
+                            </tbody></table>
+                        </div>
+                    </div>
+                    <div class="LegendeMinimized">
+                        <h2 class="LegendeHeader"><button class="LegendeMin"></button> Legend</h2>
+                    </div>
+                </div>
+                <div id="ta_div_statusWindow" class="statusWindow">
+                    <h2 class="">Status algoritma</h2>
+                    <div id="ta_div_abspielbuttons"> <!--class="ui-widget-header ui-corner-all"-->
+                        <input id="ta_button_rewind" type="checkbox"><label for="ta_button_rewind" id="ta_button_text_rewind">rewind</label>
+                        
+                        <button id="ta_button_Zurueck">nazaj</button>
+                        
+                        <button id="ta_button_1Schritt">naprej</button>
+                        
+                        <input id="ta_button_vorspulen" type="checkbox"><label for="ta_button_vorspulen" id="ta_button_text_fastforward">hitro naprej</label>
+
+                        <!-- <input type="number" id="ta_vorspulen_speed" min="2" max="500" value=5>ms -->
+
+                        <span id="ta_button_text_pause" style="display:none">pause</span>
+                    </div>
+                    <div id="ta_div_statusTabs">
+                         <ul>
+                            <li><a href="#ta_div_statusErklaerung">Razlaga</a></li>
+                            <li><a href="#ta_div_statusPseudocode">Psevdokode</a></li>
+                            <!--<li><a href="#ta_div_statusLogger">Log</a></li>-->
+                        </ul>
+                        <div id="ta_div_statusErklaerung">
+                            <div>
+                                <h3>Edmonds Blossom Algoritem</h3>
+                                <p> 
+Klikni "naprej" za izvedbo koraka algoritma, "nazaj" za prejšni korak
+  in hitro naprej za hitro izvedbo algoritma</p>
+                            </div>
+                            <div>
+                                <h3>Pregled v širino končan</h3>
+                                <p>BFS vrsta je prazna. Ni najdene povečujoče poti.</p>
+                            </div>
+                            <div>
+                                <h3>Izboljšano prirejanje</h3>
+                                <p>Povečujoča pot je invertirana. Invertiranje povečujoče poti pomeni, da vse povezave, ki niso v prirejanju, damo v prirejanje in obratno, s tem povečamo prirejanje za 1.
+								Novo prirejanje je označeno z modro barvo</p>
+                            </div>
+                            <div>
+                                <h3>Ostala prosta vozlišča</h3>
+                                <p>Še vedno so prosta vozlišča (rumena). Najdemo povečujočo pot. Povečujoča pot se začne in konča v prostem vozlišču in alternira med povezavami, ki so in niso v prirejanju.</p>
+                            </div>
+                            <div>
+                                <h3>Začnemo pregled v širino (BFS).</h3>
+                                <p>Izberemo eno od prostih tock kot
+korensko vozlišče (BFS). Obroba je
+rdeče barve med BFS. Iz korenskega vozlišča
+bo zgradil drevo izmeničnih poti (BFS drevo), dokler ne dosežemo
+drugo prosto vozlišče.</p>
+                            </div>
+                            <div>
+                                <h3>Vzamemo naslednji vozel iz BFS vrste</h3>
+                                <p>Ni novih sosedov, nadaljujemo BFS z naslednjim vozlom.</p>
+                            </div>
+                            <div>
+                                <h3>Stisni blossom</h3>
+                                <p>Najden je bil cikel lihe dolžine. Stisni v supervozlišče. Supervozlišča so na sliki večja. Supervozlišča damo v vrsto. 
+								</p>
+                            </div>
+                            <div>
+                                <h3>Nadaljuj BFS z naslednjim vozlom</h3>
+                                <p>Izberi naslednje vozlišče iz BFS
+ vrste. To vozlišče imenujemo trenutno aktivno vozlišče in je označeno z rdečo barvo.
+Iz tega vozlišča bomo raziskovali sosede in iskali prosto vozlišče.</p>
+                            </div>
+                            <div> 
+                                <h3>Večaj drevo</h3>
+                                <p>Robovi BFS drevesa so
+označen s sivo prevleko.</p>
+                            </div>
+                            <div>
+                                <h3>Ignoriraj cikle sode dolžine</h3>
+                                <p>V tem primeru nadaljujemo.</p>
+                            </div>
+                            <div>
+                                <h3>Primerjaj naslednjega soseda</h3>
+                                <p>Primerjamo naslednjega soseda(oranžna) in najdemo, da je že v prirejanju.</p>
+                            </div>
+                            <div>
+                                <h3>Primerjaj naslednjega soseda</h3>
+                                <p>Pogledamo naslednjega soseda (oranžna 
+povezava) in najdemo, da je prosto vozlišče (rumeno). To pomeni, da je povečujoča pot med korenom in tem vozliščem.</p>
+                            </div>
+                            <div>
+                                <h3>Primerjaj naslednjega soseda</h3>
+                                <p>Pogledamo naslednjega soseda (oranžna 
+povezava) in ugotovimo, da je vozel že vsebovan v BFS drevesu. To pomeni, da obstaja cikel, ki ima liho število povezav, tak cikel se imenuje blossom.</p>
+                            </div>
+                            <div>
+                                <h3>Primerjaj naslednjega soseda</h3>
+                                <p>ogledamo naslednjega soseda (oranžna 
+povezava) in ugotovimo, da je vozel že vsebovan v BFS drevesu. To pomeni, da obstaja cikel, ki ima sodo število povezav.</p>
+                            </div>
+                            <div>
+                                <h3>Rekonstrukcija povečujoče poti</h3>
+                                <p>Povečujoča pot je označena zeleno. Preden povečamo prirejanje, moramo razširiti supervozlišča vsebovana v grafu.</p>
+                            </div>
+                            <div>
+                                <h3>Razširi supervozlišča</h3>
+                                <p>Eno od supervozlišč je razširjeno. Še vedno so supervozlišča, ki morajo biti razširjena.</p>
+                            </div>
+                            <div>
+                                <h3>Rekonstrukcija povečujoče poti</h3>
+                                <p>Povečujoča pot iz BFS koren do prostega vozlišča je bila rekonstruirana in je označena z zeleno.</p>
+                            </div>
+                            <div>
+                                <h3>Reconstruction of augmenting path finished</h3>
+                                <p>After the expansion of all supernodes the augmenting path is fully reconstructed and highlighted green.</p>
+                            </div>
+                            <div>
+                                <h3>Končan algoritem</h3>
+                                <p>V grafu ni več prostih vozlišč, zato smo našli največje prirejanje. Povezave, ki so v prirejanju so označene z modro barvo.</p>
+                            </div>
+                        </div>
+
+                        <div class="PseudocodeWrapper" id="ta_div_statusPseudocode">
+                            <div><p>BEGIN</p></div>
+                            <div><p> WHILE F != ∅ DO   (*množica prostih vozlišč F*)</p></div>
+                            <div><p>   izberi r ∈ F</p>
+                                 <p>   vrsta.push(r)             (*BFS vrsta*)</p>
+                                 <p>   T ← ∅                    (*BFS drevo T*)</p>
+                                 <p>   T.add(r)</p></div>
+                            <div><p>   WHILE vrsta != ∅</p></div>
+                            <div><p>     v ← vrsta.pop()</p></div>
+                            <div><p>     FOR ALL neighbors w of v DO</p></div>
+                            <div><p>       IF w ∉ T AND w matched THEN</p></div>
+                            <div><p>           T.add(w)</p>
+                                 <p>           T.add(mate(w))</p>
+                                 <p>           vrsta.push(mate(w))</p></div>
+                            <div><p>       ELSE IF w ∈ T AND cikel sode dolžine zaznan</p>
+                                 <p>         THEN</p></div>
+                            <div><p>           CONTINUE</p></div>
+                            <div><p>       ELSE IF w ∈ T AND cikel lihe dolžine zaznan</p>
+                                 <p>         THEN</p></div>
+                            <div><p>           stisni cikel</p><p></p></div>
+                            <div><p>       ELSE IF w ∈ F THEN</p></div>
+                            <div><p>           razširi vse stisnjena vozlišča</p>
+                                 <p>           rekonstruiraj povečujočo pot</p></div> 
+                            <div><p>           obrni povečujočo pot</p></div>
+                            <div><p>END</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="ta_div_confirmTabChange" title="Končam algoritem?" class="tabChangeWarningDialog">
+                <h2>Če preklopiš med zavihkom, se bo algoritem končal</h2>
+                <p>Lahko odprete <a href="#" target="_blank" tabindex="-1">novo okno</a> za branje opisa vzporedno.</p>
+            </div>
+        </div>
+
+        <!-- TAB Beschreibung des Algorithmus -->
+        <div id="tab_ti" style="display: none;">
+            <div id="ti_div_Einfuehrungstext">
+                <h1>Prirejanja v grafih</h1>
+				<div class="BeispielbildContainer">
+				<img id="ti_img_0" src="static/02_Description.png" alt="Suche" width="250"><p>Figure 1.<br>Matching in a non-dvodelen graph which is not maximum. 3 and 5 are free vertices.</p><br>
+				<img id="ti_img_0" src="static/03_Description.png" alt="Suche" width="250"><p>Figure 2.<br>Augmenting path from free vertex 3 to free vertex 5.</p><br>
+				<img id="ti_img_0" src="static/01_Introduction.png" alt="Suche" width="250"><p>Figure 3.<br>Matching after inverting the augmenting path. Since there are no free vertices anymore, the matching must be maximum.</p><br>
+				<img id="ti_img_0" src="static/08_Description.png" alt="Suche" width="250"><p>Figure 4.<br>Layered BFS tree (in grey) with root 8 and currently active node 3. Layer 0: 8, Layer 1: 0 and 2, Layer 2: 1 and 3, ...</p><br>
+                <img id="ti_img_0" src="static/09_WhiteSpace.png" alt="Suche" height="1500" width="10">
+                </div>
+                <p>Neusmerjen graf G=(V,E) z množico vozlišč V in množico povezav E. <b>Prirejanje</b>
+  je podmnožica povezav, tako, da je vsako vozlišče pokrito z največ 1 povezavo iz M. Na sliki 1, je primer veljavnega prirejanja. 
+  Povezave so v prirejanju so pobarvane modro. Vsako vozlišče je pokrito z največ 1 povezavo.
+                <p>Graf je <b>dvodelen</b> če so lahko vozlišča razporenena v 2 množici V<sub>1</sub> in V<sub>2</sub> tako, da ima vsaka povezava konec v V<sub>1</sub> in drugi konec v V<sub>2</sub>.
+ Vemo, da je graf dvodelen če in samo če ne vsebuje lihih ciklov.
+ Očitno graf na našem primeru ni dvodelen, ker vsebuje tricikle.</p>    
+                <p>Edmonds Blossom Algoritem izračuna največje prirejanje v splošnem grafu.</p>
+               
+                <h1>Algorithm for dvodelen graphs</h1>
+                <p>We shortly recapitulate the basic concepts of the 
+Hopcroft-Karp Algorithm that are also relevant for Edmonds's Blossom 
+Algorithm. In order to improve a given matching, we try to find an 
+augmenting path. An <b>augmenting path</b> is a path starting with a 
+free node, ending with a free node and alternating between unmatched and
+ matched edges. You can see an example of such an augmenting path 
+(colored in green) in Figure 2. The path starts at the free vertex 3 and
+ ends at the free vertex 5 and alternates between unmatched and matched 
+edges. An other (trivial) example of an augmenting path would be the 
+direct edge between 3 and 5 that we already considered in the first 
+paragraph.</p>If we have found an augmenting path, we can improve the 
+current matching by inverting the edges along the path: matched edges 
+are changed to unmatched ones and vice versa. By doing so, we increase 
+the cardinality of the matching by 1. The result of this procedure, a 
+matching with three instead of two edges, can bee seen in Figure 3.<p></p><p>
+ The following theorem by C. Berge is essential for the algorithm: A 
+matching M is not maximum iff there exists an augmenting path in G. 
+Thus, if we cannot find an augmenting path in G anymore, the resulting 
+matching must be maximum.</p>
+                <p>But how can we find augmenting paths in a graph? We 
+first pick an arbitrary free node r and start a modified Breadth-First 
+Search (BFS) from there. While traversing the graph we construct a 
+layered tree with root r. Edges from even to odd layers are unmatched 
+edges, edges from odd to even layers are matched ones. Such a layered 
+BFS tree is shown in Figure 4.</p><p>If we check a new node v during the execution of the BFS, one of the following primers may occur: 
+                </p><ul>
+                    <li><b>primer 1: v je prosti vozel</b><br>Then we have found an augmenting path from r to v. We invert the path and are done with the BFS.</li>
+                    <li><b>primer 2: v is already matched and not contained in the tree so far</b><br>Then we add v and its mate to the tree and push the mate of v to the BFS vrsta to continue the search from there later.</li>
+                    <li><b>primer 3: v is already contained in the tree and we have detected a cycle of even length</b><br>There is nothing to do in this primer, we ignore v and continue the BFS.</li>
+                    <li><b>primer 4: v is already contained in the tree and we have detected a cycle of odd length</b><br>Since
+ our graph is dvodelen, this primer cannot occur. When developing an 
+algorithm for general graphs, however, we have to deal with this primer as
+ well.</li>
+                </ul><p></p>
+                
+                <h1>General graphs: How to deal with odd-length cycles?</h1>
+                <p>In general graphs, we also use the procedure 
+explained above to find augmenting paths. However, we might detect 
+odd-length cycles now (primer 4) and have to treat this primer 
+appropriately. The idea is the following: We ignore the entire cycle by 
+contracting it to a single supernode and continue the BFS in the new 
+graph. When we have found an augmenting path at some point we have to 
+expand all supernodes again (in reversed order) before inverting the 
+matching. We call such odd-length cycles <b>blossoms</b> and this is why the algorithm is often referred to as the Blossom Algorithm.</p>
+				<p>We illustrate the procedure of contracting an odd-length cycle to
+ a supernode and expanding it again with the following small example. In
+ the picture to the left, we see a layered BFS tree with root 4. At the 
+moment, the active node is 1 and we check the edge between 1 and 3. 
+Since 3 is already contained in the tree, we know that there must be a 
+cycle. The cycle has odd length, so we end up in primer 4 and have to 
+contract the whole blossom (1, 0, 4, 2, 3) to a new supernode 7 (on the 
+right).</p>
+				<center><img id="ti_img_0" src="static/04_Description.png" alt="Suche" height="200"><img id="ti_img_0" src="static/09_WhiteSpace.png" alt="Suche" height="100">
+				<img id="ti_img_0" src="static/05_Description.png" alt="Suche" height="150"></center><br>
+				<p>From 7 we continue the Breadth-First Search and find an 
+augmenting path between 7 and 5. When we have found an augmenting path, 
+we have to check if there are any contracted nodes that must be expanded
+ again. Thus, we expand the supernode 7 to the original blossom (1, 0, 
+4, 2, 3) again (picture to the right). In addition, we have to 
+reconstruct the augmenting path through the blossom correctly. Now that 
+there are not any contracted nodes left we can invert the augmenting 
+path.</p> 
+				<center><img id="ti_img_0" src="static/06_Description.png" alt="Suche" height="150"><img id="ti_img_0" src="static/09_WhiteSpace.png" alt="Suche" height="100">
+				<img id="ti_img_0" src="static/07_Description.png" alt="Suche" height="200"></center>
+
+                <h1>Zakaj skrčitvena metoda deluje?</h1>
+                <p>Predstavljamo idejo za krčenje
+blossoma, če si ogledamo naslednji primer grafa. Slika prikazuje korak algoritma: Konstruirali smo drevo s korenom 8 in sedaj 
+zaznavamo bloosom (3,4,5,6,7), ko raziskujemo povezavo med 5 in 6. when 
+exploring the edge between 5 and 6. We call the path from the root to 
+the blossom (in this primer 8 to 3) the <b>stem</b> and the intersecting node 3 the <b>tip</b> of the stem.  
+                </p><center><img id="ti_img_0" src="static/21_Description.png" alt="Suche" height="225"></center>
+                First note that the last edge of the stem must always be
+ a matched edge (edge from 2 to 3 in the example). Then, for each node v
+ contained in the blossom (except for the tip itself), there are two 
+distinct paths from the tip to v. To reach node 6 from the tip, for 
+instance, we could either traverse the blossom clockwise and choose the 
+path (3,4,5,6) or we traverse it counter-clockwise and choose the path 
+(3,7,6). One of the paths always ends with a matched edge, the other one
+ with an unmatched edge. Thus, one of the two paths will make it 
+possible to complete an augmenting path correctly later. At this point 
+of the algorithm, however, we cannot make this decision because we do 
+not know yet where the augmenting path (if there is any) will lead to. 
+Thus, we postpone the decision of correctly traversing the blossom by 
+shrinking the entire blossom to a supernode. When we find a free node, 
+we expand the supernodes again and can reconstruct the augmenting path 
+correctly.<br> Have a look at the two examples above. In both graphs, we
+ find the free node 9 and have to reconstruct the path through the 
+blossom. The edge from 9 to the blossom is unmatched in both primers so we
+ have to start the traversal of the blossom with a matched edge (between
+ 6 and 7). Thus, in the first graph, we go clockwise until we reach the 
+tip 3 and in the second graph we go counter-clockwise.   
+                <center><img id="ti_img_0" src="static/22_Description.png" alt="Suche" height="225"></center>
+                <center><img id="ti_img_0" src="static/23_Description.png" alt="Suche" height="225"></center>
+
+                <br style="clear: both;">
+            </div>
+        </div>
+
+       
+        <!-- TAB Weiteres -->
+        <div id="tab_tw" style="display: none;">
+            <div id="tw_Accordion">
+
+                <h3>Pseudo koda algoritma</h3>
+                    <div><pre><code>
+                    BEGIN
+                      WHILE F != ∅ DO   (*set of free nodes F*)
+                        pick r ∈ F
+                        vrsta.push(r)             (*BFS vrsta*)
+                        T ← ∅                    (*BFS tree T*)
+                        T.add(r)
+                        WHILE vrsta != ∅
+                          v ← vrsta.pop()
+                          FOR ALL neighbors w of v DO
+                            IF w ∉ T AND w v prirejanju THEN
+                              T.add(w)
+                              T.add(mate(w))
+                              vrsta.push(mate(w))
+                            ELSE IF w ∈ T AND cikel sode dolžine zaznan THEN
+                              CONTINUE
+                            ELSE IF w ∈ T AND cikel lihe dolžine zaznan THEN
+                              stisni cikel
+                            ELSE IF w ∈ F THEN
+                              razširi vse vozle
+                              rekonstruiraj povečujočo pot
+                              obeni povečujočo pot
+                    END
+                    </code></pre></div>
+
+                <h3>Časovna zahtevnost algoritma</h3>
+                <div>
+                   
+                    <p>Obstaja več implementacij edmondsovega blossom algoritma, na tej strani je implementiran algoritem s časovno zahtevnostjo O(n^2 m) . Naj bo n število vozišč in m število povezav. 
+					Algoritem ima zahtevnost O(n^2 m). Z uporabo boljše implementacije (Micali and Vazirani, [3]), je časovna zahtevnost zmanjšana na O(n^(1/2) m). </p>
+                    <h2>Analiza časovne zahtevnosti</h2>
+                    <p>V grafu je največ n prostih vozlišč. Za vsako tako vozlišče naredimo BFS, da najdemo povečujočo pot, ki rabi O(n+m) = O(m) 
+					za povezan graf. Rabimo največ n stisnitev (in največ n razširitev). 1 stisnitev in razširitev je izvedena v času O(m), ker moramo v najslabšem primeru
+					stisniti vsa vozlišča in povezave v supervozlišče. Ko najdemo povečujočo pot, moramo invertirati, kar rabimo  O(n) v najslabšem primeru.
+					Skupna časovna zahtevnost je O(n(m + nm + n)) = O(n^2 m).</p>
+                </div>
+                
+
+              
+
+                <h3>Reference</h3>
+                <div>
+                <h4>Literatura</h4>
+                    <p>[1] Edmonds, Jack. "Paths, trees, and flowers." <i>Canadian Journal of mathematics</i> 17.3 (1965): 449-467.</p>
+                    <p>[2] Edmonds, Jack. "Maximum matching and a polyhedron with 0, l-vertices." <i>J. Res. Nat. Bur. Standards B</i> 69.1965 (1965): 125-130.</p>
+                    <p>[3] Micali, Silvio, and Vijay V. Vazirani. "An 
+\(\mathcal{O}(\sqrt{|V|} |E|)\) algorithm for finding maximum matching 
+in general graphs." <i>Foundations of Computer Science, 1980., 21st Annual Symposium on.</i> IEEE, 1980.</p>
+		        <h4>Web resources</h4>   
+                    <p>[4] A Compendium of Applications of the Graph Matching Problem. <a href="http://www.cs.odu.edu/%7Emhalappa/matching/applications.html" target="_blank">http://www.cs.odu.edu/~mhalappa/matching/applications.html</a> <i>(accessed on June 6, 2016)</i></p>       
+                </div>
+
+                
+
+</div></body></html>
